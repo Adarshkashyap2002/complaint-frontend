@@ -27,7 +27,7 @@ function ComplaintList() {
     const token = localStorage.getItem("access_token");
 
     axios.get(
-      "http://127.0.0.1:8000/api/complaints/",
+      `${process.env.REACT_APP_API_URL}/api/complaints/`,
       {
         headers:{
           Authorization:`Bearer ${token}`

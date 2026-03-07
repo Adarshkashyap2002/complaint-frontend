@@ -43,13 +43,10 @@ function Login() {
 
     try {
 
-      const res = await axios.post(
-        "http://127.0.0.1:8000/api/token/",
-        {
-          username: username,
-          password: password,
-        }
-      );
+      const res = await axios.post(`${process.env.REACT_APP_API_URL}/api/token/`, {
+      username,
+      password,
+      });
 
       // store tokens
       localStorage.setItem("access_token", res.data.access);
