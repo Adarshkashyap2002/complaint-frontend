@@ -2,54 +2,94 @@ import React, { useState } from "react";
 import axios from "axios";
 import API_URL from "../api";
 
-function AddComplaint(){
+function AddComplaint() {
 
-  const [title,setTitle] = useState("");
-  const [description,setDescription] = useState("");
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [location, setLocation] = useState("");
 
-  const submitComplaint = async(e)=>{
+  const handleSubmit = async (e) => {
 
     e.preventDefault();
 
     const token = localStorage.getItem("access_token");
 
-    await axios.post(`${API_URL}/api/complaints/`,
-      {
-        title,
-        description
-      },
-      {
-        headers:{
-          Authorization:`Bearer ${token}`
-        }
-      }
-    );
+    try {
 
-    alert("Complaint submitted");
+      await axios.post(
+        `${API_URL}/api/complaints/`,
+        {
+          title: title,
+          description: description,
+          location: location,
+          status: "Pending"
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      );
+
+      alert("Complaint Submitted Successfully");
+
+      setTitle("");
+      setDescription("");
+      setLocation("");
+
+    } catch (error) {
+
+      console.error(error);
+      alert("Error submitting complaint");
+
+    }
 
   };
 
-  return(
+  return (
 
-    <form onSubmit={submitComplaint}>
+    <div style={{ padding: "40px" }}>
 
-      <input
-        placeholder="Title"
-        value={title}
-        onChange={(e)=>setTitle(e.target.value)}
-      />
+      <h2>Add Complaint</h2>
 
-      <textarea
-        placeholder="Description"
-        value={description}
-        onChange={(e)=>setDescription(e.target.value)}
-      />
+      <form onSubmit={handleSubmit}>
 
-      <button type="submit">
-        Submit
-      </button>
+        <div style={{ marginBottom: "10px" }}>
+          <input
+            type="text"
+            placeholder="Title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            required
+          />
+        </div>
 
-    </form>
+        <div style={{ marginBottom: "10px" }}>
+          <textarea
+            placeholder="Description"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            required
+          />
+        </div>
+
+        <div style={{ marginBottom: "10px" }}>
+          <input
+            type="text"
+            placeholder="Location"
+            value={location}
+            onChange={(e) => setLocation(e.target.value)}
+            required
+          />
+        </div>
+
+        <button type="submit">
+          Submit Complaint
+        </button>
+
+      </form>
+
+    </div>
 
   );
 
