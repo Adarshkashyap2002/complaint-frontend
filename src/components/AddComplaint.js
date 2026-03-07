@@ -1,134 +1,58 @@
 import React, { useState } from "react";
 import axios from "axios";
+import API_URL from "../api";
 
-import DashboardLayout from "./DashboardLayout";
+function AddComplaint(){
 
-import {
-  Container,
-  TextField,
-  Button,
-  Typography,
-  Box,
-  Paper,
-  Alert
-} from "@mui/material";
+  const [title,setTitle] = useState("");
+  const [description,setDescription] = useState("");
 
-function AddComplaint() {
-
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [location, setLocation] = useState("");
-  const [success, setSuccess] = useState(false);
-  const [error, setError] = useState("");
-
-  const submitComplaint = async (e) => {
+  const submitComplaint = async(e)=>{
 
     e.preventDefault();
 
-    setError("");
-    setSuccess(false);
-
     const token = localStorage.getItem("access_token");
 
-    try {
-
-      await axios.post(
-        `${process.env.REACT_APP_API_URL}/api/complaints/`, data,
-        {
-          title: title,
-          description: description,
-          location: location,
-          status: "Pending"
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
+    await axios.post(`${API_URL}/api/complaints/`,
+      {
+        title,
+        description
+      },
+      {
+        headers:{
+          Authorization:`Bearer ${token}`
         }
-      );
+      }
+    );
 
-      setSuccess(true);
-
-      setTitle("");
-      setDescription("");
-      setLocation("");
-
-    } catch (err) {
-
-      setError("Failed to submit complaint");
-
-    }
+    alert("Complaint submitted");
 
   };
 
-  return (
-    <Container maxWidth="sm">
+  return(
 
-      <Box mt={6}>
+    <form onSubmit={submitComplaint}>
 
-        <Paper elevation={6} sx={{ p: 4 }}>
+      <input
+        placeholder="Title"
+        value={title}
+        onChange={(e)=>setTitle(e.target.value)}
+      />
 
-          <Typography variant="h5" mb={2}>
-            Submit Complaint
-          </Typography>
+      <textarea
+        placeholder="Description"
+        value={description}
+        onChange={(e)=>setDescription(e.target.value)}
+      />
 
-          {success && (
-            <Alert severity="success">
-              Complaint submitted successfully
-            </Alert>
-          )}
+      <button type="submit">
+        Submit
+      </button>
 
-          {error && (
-            <Alert severity="error">
-              {error}
-            </Alert>
-          )}
+    </form>
 
-          <form onSubmit={submitComplaint}>
-
-            <TextField
-              label="Title"
-              fullWidth
-              margin="normal"
-              value={title}
-              onChange={(e)=>setTitle(e.target.value)}
-            />
-
-            <TextField
-              label="Description"
-              fullWidth
-              multiline
-              rows={3}
-              margin="normal"
-              value={description}
-              onChange={(e)=>setDescription(e.target.value)}
-            />
-
-            <TextField
-              label="Location"
-              fullWidth
-              margin="normal"
-              value={location}
-              onChange={(e)=>setLocation(e.target.value)}
-            />
-
-            <Button
-              type="submit"
-              variant="contained"
-              sx={{ mt: 2 }}
-              fullWidth
-            >
-              Submit Complaint
-            </Button>
-
-          </form>
-
-        </Paper>
-
-      </Box>
-
-    </Container>
   );
+
 }
 
 export default AddComplaint;

@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
+import API_URL from "../api";
+
 import {
   Container,
   TextField,
@@ -26,10 +28,6 @@ import {
 function Login() {
 
   const navigate = useNavigate();
-
-  const API_URL =
-    process.env.REACT_APP_API_URL ||
-    "https://complaint-backend-hjhv.onrender.com";
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -69,12 +67,6 @@ function Login() {
 
   };
 
-  const handleForgotPassword = () => {
-
-    alert("Password reset feature not implemented yet. Contact admin.");
-
-  };
-
   return (
     <Box
       sx={{
@@ -89,38 +81,27 @@ function Login() {
 
         <Fade in={true} timeout={800}>
 
-          <Paper
-            elevation={10}
-            sx={{
-              p: 4,
-              borderRadius: 3,
-              textAlign: "center",
-            }}
-          >
+          <Paper elevation={10} sx={{ p:4, borderRadius:3 }}>
 
             <Box
               sx={{
-                backgroundColor: "primary.main",
-                borderRadius: "50%",
-                p: 2,
-                display: "inline-flex",
-                mb: 2,
-                color: "white",
+                backgroundColor:"primary.main",
+                borderRadius:"50%",
+                p:2,
+                display:"inline-flex",
+                mb:2,
+                color:"white",
               }}
             >
-              <LockOutlined />
+              <LockOutlined/>
             </Box>
 
             <Typography variant="h4" fontWeight="bold">
               Login
             </Typography>
 
-            <Typography variant="body2" sx={{ mb: 3 }}>
-              Sign in to continue
-            </Typography>
-
             {error && (
-              <Alert severity="error" sx={{ mb: 2 }}>
+              <Alert severity="error" sx={{ mt:2 }}>
                 {error}
               </Alert>
             )}
@@ -131,41 +112,39 @@ function Login() {
                 fullWidth
                 label="Username"
                 margin="normal"
-                required
                 value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                onChange={(e)=>setUsername(e.target.value)}
                 InputProps={{
-                  startAdornment: (
+                  startAdornment:(
                     <InputAdornment position="start">
-                      <PersonOutline />
+                      <PersonOutline/>
                     </InputAdornment>
-                  ),
+                  )
                 }}
               />
 
               <TextField
                 fullWidth
                 label="Password"
-                type={showPassword ? "text" : "password"}
+                type={showPassword ? "text":"password"}
                 margin="normal"
-                required
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(e)=>setPassword(e.target.value)}
                 InputProps={{
-                  startAdornment: (
+                  startAdornment:(
                     <InputAdornment position="start">
-                      <LockOutlined />
+                      <LockOutlined/>
                     </InputAdornment>
                   ),
-                  endAdornment: (
+                  endAdornment:(
                     <InputAdornment position="end">
                       <IconButton
-                        onClick={() => setShowPassword(!showPassword)}
+                        onClick={()=>setShowPassword(!showPassword)}
                       >
-                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                        {showPassword ? <VisibilityOff/> : <Visibility/>}
                       </IconButton>
                     </InputAdornment>
-                  ),
+                  )
                 }}
               />
 
@@ -173,21 +152,13 @@ function Login() {
                 fullWidth
                 variant="contained"
                 type="submit"
-                sx={{ mt: 3 }}
+                sx={{ mt:3 }}
                 disabled={loading}
               >
-                {loading ? <CircularProgress size={24} /> : "Login"}
+                {loading ? <CircularProgress size={24}/> : "Login"}
               </Button>
 
             </form>
-
-            <Typography
-              variant="body2"
-              sx={{ mt: 2, cursor: "pointer", color: "primary.main" }}
-              onClick={handleForgotPassword}
-            >
-              Forgot Password?
-            </Typography>
 
           </Paper>
 
