@@ -27,6 +27,10 @@ function Login() {
 
   const navigate = useNavigate();
 
+  const API_URL =
+    process.env.REACT_APP_API_URL ||
+    "https://complaint-backend-hjhv.onrender.com";
+
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
@@ -43,16 +47,14 @@ function Login() {
 
     try {
 
-      const res = await axios.post(`${process.env.REACT_APP_API_URL}/api/token/`, {
-      username,
-      password,
+      const res = await axios.post(`${API_URL}/api/token/`, {
+        username,
+        password,
       });
 
-      // store tokens
       localStorage.setItem("access_token", res.data.access);
       localStorage.setItem("refresh_token", res.data.refresh);
 
-      // redirect after login
       navigate("/complaints");
 
     } catch (err) {
