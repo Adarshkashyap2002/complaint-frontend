@@ -46,9 +46,9 @@ function Login() {
     try {
 
       const res = await axios.post(`${API_URL}/api/token/`, {
-      username,
-      password,
-});
+        username: username.trim(),
+        password: password.trim(),
+      });
 
       localStorage.setItem("access_token", res.data.access);
       localStorage.setItem("refresh_token", res.data.refresh);
@@ -113,7 +113,7 @@ function Login() {
                 label="Username"
                 margin="normal"
                 value={username}
-                onChange={(e)=>setUsername(e.target.value)}
+                onChange={(e)=>setUsername(e.target.value.trimStart())}
                 InputProps={{
                   startAdornment:(
                     <InputAdornment position="start">
@@ -129,7 +129,7 @@ function Login() {
                 type={showPassword ? "text":"password"}
                 margin="normal"
                 value={password}
-                onChange={(e)=>setPassword(e.target.value)}
+                onChange={(e)=>setPassword(e.target.value.trimStart())}
                 InputProps={{
                   startAdornment:(
                     <InputAdornment position="start">
