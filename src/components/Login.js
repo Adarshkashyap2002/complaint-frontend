@@ -46,9 +46,9 @@ function Login() {
     try {
 
       const res = await axios.post(`${API_URL}/api/token/`, {
-        username,
-        password,
-      });
+      username,
+      password,
+});
 
       localStorage.setItem("access_token", res.data.access);
       localStorage.setItem("refresh_token", res.data.refresh);
