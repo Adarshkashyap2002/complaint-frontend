@@ -45,8 +45,7 @@ function Login() {
 
     try {
 
-     //const res = await
-       axios.post(`${API_URL}/api/token/`, {
+     const res = await axios.post(`${API_URL}/api/token/`, {
         username: username.trim(),
         password: password.trim(),
       });
