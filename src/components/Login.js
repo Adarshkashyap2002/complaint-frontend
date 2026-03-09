@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
@@ -29,8 +29,9 @@ function Login() {
 
   const navigate = useNavigate();
 
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  // PREFILLED LOGIN
+  const [username, setUsername] = useState("admin");
+  const [password, setPassword] = useState("admin123");
 
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -38,14 +39,14 @@ function Login() {
 
   const handleLogin = async (e) => {
 
-    e.preventDefault();
+    if (e) e.preventDefault();
 
     setLoading(true);
     setError("");
 
     try {
 
-     const res = await axios.post(`${API_URL}/api/token/`, {
+      const res = await axios.post(`${API_URL}/api/token/`, {
         username: username.trim(),
         password: password.trim(),
       });
@@ -57,7 +58,8 @@ function Login() {
 
     } catch (err) {
 
-      setError("Invalid username or password");
+      console.log(err.response?.data);
+      setError(JSON.stringify(err.response?.data));
 
     } finally {
 
@@ -66,6 +68,19 @@ function Login() {
     }
 
   };
+
+  // AUTO LOGIN WHEN PAGE LOADS
+  useEffect(() => {
+
+    const token = localStorage.getItem("access_token");
+
+    if (!token) {
+      handleLogin();
+    } else {
+      navigate("/complaints");
+    }
+
+  }, []);
 
   return (
     <Box
@@ -113,7 +128,7 @@ function Login() {
                 label="Username"
                 margin="normal"
                 value={username}
-                onChange={(e)=>setUsername(e.target.value.trimStart())}
+                onChange={(e)=>setUsername(e.target.value)}
                 InputProps={{
                   startAdornment:(
                     <InputAdornment position="start">
@@ -129,7 +144,7 @@ function Login() {
                 type={showPassword ? "text":"password"}
                 margin="normal"
                 value={password}
-                onChange={(e)=>setPassword(e.target.value.trimStart())}
+                onChange={(e)=>setPassword(e.target.value)}
                 InputProps={{
                   startAdornment:(
                     <InputAdornment position="start">
