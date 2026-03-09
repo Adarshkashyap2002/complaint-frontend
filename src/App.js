@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Complaints from "./pages/Complaints";
 
 import Login from "./components/Login";
 import ComplaintList from "./components/ComplaintList";
