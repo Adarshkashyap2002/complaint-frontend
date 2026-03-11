@@ -18,6 +18,8 @@ import DashboardIcon from "@mui/icons-material/Dashboard";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import LogoutIcon from "@mui/icons-material/Logout";
 
+import Navbar from "./Navbar";
+
 const expandedWidth = 220;
 const collapsedWidth = 70;
 
@@ -25,7 +27,7 @@ function DashboardLayout({ children }) {
 
   const navigate = useNavigate();
 
-  const [open,setOpen] = useState(true);
+  const [open, setOpen] = useState(true);
 
   const toggleSidebar = () => {
     setOpen(!open);
@@ -38,32 +40,35 @@ function DashboardLayout({ children }) {
 
   return (
 
-    <Box sx={{ display:"flex" }}>
+    <Box sx={{ display: "flex" }}>
+
+      {/* Sidebar */}
 
       <Drawer
         variant="permanent"
         sx={{
           width: open ? expandedWidth : collapsedWidth,
-          flexShrink:0,
-          "& .MuiDrawer-paper":{
+          flexShrink: 0,
+
+          "& .MuiDrawer-paper": {
             width: open ? expandedWidth : collapsedWidth,
-            transition:"0.3s",
-            overflowX:"hidden",
-            background:"linear-gradient(180deg,#0f172a,#1e293b)",
-            color:"white",
-            border:"none"
+            transition: "0.3s",
+            overflowX: "hidden",
+            background: "linear-gradient(180deg,#0f172a,#1e293b)",
+            color: "white",
+            border: "none"
           }
         }}
       >
 
-        {/* Top Section */}
+        {/* Header */}
 
         <Box
           sx={{
-            display:"flex",
-            alignItems:"center",
+            display: "flex",
+            alignItems: "center",
             justifyContent: open ? "space-between" : "center",
-            p:2
+            p: 2
           }}
         >
 
@@ -73,8 +78,8 @@ function DashboardLayout({ children }) {
             </Typography>
           )}
 
-          <IconButton onClick={toggleSidebar} sx={{ color:"white" }}>
-            <MenuIcon/>
+          <IconButton onClick={toggleSidebar} sx={{ color: "white" }}>
+            <MenuIcon />
           </IconButton>
 
         </Box>
@@ -85,41 +90,37 @@ function DashboardLayout({ children }) {
 
           <ListItem
             button
-            onClick={()=>navigate("/complaints")}
+            onClick={() => navigate("/complaints")}
             sx={{
-              "&:hover":{
-                background:"rgba(255,255,255,0.1)"
+              "&:hover": {
+                background: "rgba(255,255,255,0.1)"
               }
             }}
           >
 
-            <ListItemIcon sx={{ color:"white" }}>
-              <DashboardIcon/>
+            <ListItemIcon sx={{ color: "white" }}>
+              <DashboardIcon />
             </ListItemIcon>
 
-            {open && (
-              <ListItemText primary="Dashboard"/>
-            )}
+            {open && <ListItemText primary="Dashboard" />}
 
           </ListItem>
 
           <ListItem
             button
-            onClick={()=>navigate("/add-complaint")}
+            onClick={() => navigate("/add-complaint")}
             sx={{
-              "&:hover":{
-                background:"rgba(255,255,255,0.1)"
+              "&:hover": {
+                background: "rgba(255,255,255,0.1)"
               }
             }}
           >
 
-            <ListItemIcon sx={{ color:"white" }}>
-              <AddCircleOutlineIcon/>
+            <ListItemIcon sx={{ color: "white" }}>
+              <AddCircleOutlineIcon />
             </ListItemIcon>
 
-            {open && (
-              <ListItemText primary="Add Complaint"/>
-            )}
+            {open && <ListItemText primary="Add Complaint" />}
 
           </ListItem>
 
@@ -127,13 +128,13 @@ function DashboardLayout({ children }) {
 
         {/* Logout */}
 
-        <Box sx={{ p:2, mt:"auto" }}>
+        <Box sx={{ p: 2, mt: "auto" }}>
 
           <Button
             variant="contained"
             color="error"
             fullWidth={open}
-            startIcon={<LogoutIcon/>}
+            startIcon={<LogoutIcon />}
             onClick={logout}
           >
 
@@ -149,13 +150,22 @@ function DashboardLayout({ children }) {
 
       <Box
         sx={{
-          flexGrow:1,
-          p:4,
-          transition:"0.3s"
+          flexGrow: 1,
+          display: "flex",
+          flexDirection: "column",
+          background: "#f8fafc"
         }}
       >
 
-        {children}
+        {/* Top Navbar */}
+
+        <Navbar />
+
+        {/* Page Content */}
+
+        <Box sx={{ p: 4 }}>
+          {children}
+        </Box>
 
       </Box>
 

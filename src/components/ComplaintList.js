@@ -1,134 +1,230 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import API_URL from "../api";
 
 import {
-  Grid,
-  Card,
-  CardContent,
+  Container,
   Typography,
-  Box
+  Grid,
+  Paper,
+  Box,
+  Card,
+  Chip
 } from "@mui/material";
 
-function ComplaintList(){
+import AssignmentIcon from "@mui/icons-material/Assignment";
+import PendingActionsIcon from "@mui/icons-material/PendingActions";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+
+import DashboardLayout from "./DashboardLayout";
+import ComplaintChart from "./ComplaintChart";
+
+function ComplaintList() {
 
   const [complaints,setComplaints] = useState([]);
 
-  const fetchComplaints = async () => {
+  useEffect(()=>{
 
     const token = localStorage.getItem("access_token");
 
-    try{
-
-      const res = await axios.get(
-        `${API_URL}/api/complaints/`,
-        {
-          headers:{
-            Authorization:`Bearer ${token}`
-          }
+    axios.get(
+      "http://127.0.0.1:8000/api/complaints/",
+      {
+        headers:{
+          Authorization:`Bearer ${token}`
         }
-      );
-
+      }
+    )
+    .then(res=>{
       setComplaints(res.data);
+    });
 
-    }catch(err){
-      console.log(err);
-    }
-
-  };
-
-  useEffect(()=>{
-    fetchComplaints();
   },[]);
 
   const total = complaints.length;
   const pending = complaints.filter(c=>c.status==="Pending").length;
   const resolved = complaints.filter(c=>c.status==="Resolved").length;
 
-  return(
+  const statusColor = (status)=>{
 
-    <Box>
+    if(status==="Pending") return "warning";
+    if(status==="Resolved") return "success";
+    return "default";
 
-      <Typography variant="h4" mb={4}>
-        Dashboard
-      </Typography>
+  };
 
-      <Grid container spacing={3}>
+  return (
 
-        <Grid item xs={4}>
-          <Card>
-            <CardContent>
-              <Typography variant="h6">
-                Total Complaints
-              </Typography>
-              <Typography variant="h3">
-                {total}
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
+    <Box
+      sx={{
+        minHeight:"100vh",
+        background:"linear-gradient(135deg,#eef2ff,#f8fafc)",
+        py:4
+      }}
+    >
 
-        <Grid item xs={4}>
-          <Card>
-            <CardContent>
-              <Typography variant="h6">
-                Pending
-              </Typography>
-              <Typography variant="h3">
-                {pending}
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
+    <DashboardLayout>
 
-        <Grid item xs={4}>
-          <Card>
-            <CardContent>
-              <Typography variant="h6">
-                Resolved
-              </Typography>
-              <Typography variant="h3">
-                {resolved}
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
+      <Container maxWidth="lg">
 
-      </Grid>
-
-      <Box mt={5}>
-
-        <Typography variant="h5" mb={2}>
-          Recent Complaints
+        <Typography variant="h4" fontWeight="bold" mb={4}>
+          Complaint Dashboard
         </Typography>
 
+        {/* Stats Cards */}
+
+        <Grid container spacing={3} mb={5}>
+
+          <Grid item xs={12} md={4}>
+
+            <Card
+              sx={{
+                height:120,
+                display:"flex",
+                alignItems:"center",
+                justifyContent:"space-between",
+                px:3,
+                borderRadius:4,
+                background:"#f1f5ff"
+              }}
+            >
+
+              <Box>
+                <Typography variant="h6">
+                  Total Complaints
+                </Typography>
+
+                <Typography variant="h3" fontWeight="bold">
+                  {total}
+                </Typography>
+              </Box>
+
+              <AssignmentIcon color="primary"/>
+
+            </Card>
+
+          </Grid>
+
+          <Grid item xs={12} md={4}>
+
+            <Card
+              sx={{
+                height:120,
+                display:"flex",
+                alignItems:"center",
+                justifyContent:"space-between",
+                px:3,
+                borderRadius:4,
+                background:"#fff7e6"
+              }}
+            >
+
+              <Box>
+                <Typography variant="h6">
+                  Pending
+                </Typography>
+
+                <Typography variant="h3" fontWeight="bold">
+                  {pending}
+                </Typography>
+              </Box>
+
+              <PendingActionsIcon color="warning"/>
+
+            </Card>
+
+          </Grid>
+
+          <Grid item xs={12} md={4}>
+
+            <Card
+              sx={{
+                height:120,
+                display:"flex",
+                alignItems:"center",
+                justifyContent:"space-between",
+                px:3,
+                borderRadius:4,
+                background:"#ecfff4"
+              }}
+            >
+
+              <Box>
+                <Typography variant="h6">
+                  Resolved
+                </Typography>
+
+                <Typography variant="h3" fontWeight="bold">
+                  {resolved}
+                </Typography>
+              </Box>
+
+              <CheckCircleIcon color="success"/>
+
+            </Card>
+
+          </Grid>
+
+        </Grid>
+
+        {/* Chart */}
+
+        <Paper sx={{ p:3, borderRadius:4, mb:5 }}>
+
+          <Typography variant="h6" mb={2}>
+            Complaint Analytics
+          </Typography>
+
+          <ComplaintChart
+            pending={pending}
+            resolved={resolved}
+          />
+
+        </Paper>
+
+        {/* Complaint List */}
+
         {complaints.map(c=>(
+          <Paper
+            key={c.id}
+            sx={{
+              p:3,
+              mb:2,
+              borderRadius:4,
+              border:"1px solid #eee"
+            }}
+          >
 
-          <Card key={c.id} sx={{mb:2}}>
-            <CardContent>
+            <Typography variant="h6">
+              {c.title}
+            </Typography>
 
-              <Typography variant="h6">
-                {c.title}
-              </Typography>
+            <Typography color="text.secondary">
+              {c.description}
+            </Typography>
+
+            <Box
+              mt={2}
+              display="flex"
+              justifyContent="space-between"
+            >
 
               <Typography>
-                {c.description}
+                📍 {c.location}
               </Typography>
 
-              <Typography>
-                Location: {c.location}
-              </Typography>
+              <Chip
+                label={c.status}
+                color={statusColor(c.status)}
+              />
 
-              <Typography>
-                Status: {c.status}
-              </Typography>
+            </Box>
 
-            </CardContent>
-          </Card>
-
+          </Paper>
         ))}
 
-      </Box>
+      </Container>
+
+    </DashboardLayout>
 
     </Box>
 
