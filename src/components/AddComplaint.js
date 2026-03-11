@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import API_URL from "../api";
 
 import {
@@ -15,12 +16,14 @@ import {
 
 function AddComplaint() {
 
+  const navigate = useNavigate();
+
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [location, setLocation] = useState("");
 
-  const [success,setSuccess] = useState("");
-  const [error,setError] = useState("");
+  const [success, setSuccess] = useState("");
+  const [error, setError] = useState("");
 
   const handleSubmit = async (e) => {
 
@@ -39,8 +42,8 @@ function AddComplaint() {
           status: "Pending"
         },
         {
-          headers:{
-            Authorization:`Bearer ${token}`
+          headers: {
+            Authorization: `Bearer ${token}`
           }
         }
       );
@@ -52,7 +55,11 @@ function AddComplaint() {
       setDescription("");
       setLocation("");
 
-    } catch(err){
+      setTimeout(() => {
+        navigate("/complaints");
+      }, 1000);
+
+    } catch (err) {
 
       console.error(err);
       setError("Failed to submit complaint");
@@ -74,8 +81,8 @@ function AddComplaint() {
             Add Complaint
           </Typography>
 
-          {success && <Alert severity="success">{success}</Alert>}
-          {error && <Alert severity="error">{error}</Alert>}
+          {success && <Alert severity="success" sx={{ mb:2 }}>{success}</Alert>}
+          {error && <Alert severity="error" sx={{ mb:2 }}>{error}</Alert>}
 
           <form onSubmit={handleSubmit}>
 
