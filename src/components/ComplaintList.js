@@ -11,6 +11,16 @@ import {
   Box
 } from "@mui/material";
 
+import {
+  PieChart,
+  Pie,
+  Cell,
+  Tooltip,
+  ResponsiveContainer
+} from "recharts";
+
+const COLORS = ["#ff9800", "#4caf50"];
+
 function ComplaintList() {
 
   const [complaints,setComplaints] = useState([]);
@@ -19,7 +29,7 @@ function ComplaintList() {
 
     const token = localStorage.getItem("access_token");
 
-    try{
+    try {
 
       const res = await axios.get(
         `${API_URL}/api/complaints/`,
@@ -32,7 +42,7 @@ function ComplaintList() {
 
       setComplaints(res.data);
 
-    }catch(err){
+    } catch(err){
       console.error(err);
     }
 
@@ -45,6 +55,11 @@ function ComplaintList() {
   const total = complaints.length;
   const pending = complaints.filter(c=>c.status==="Pending").length;
   const resolved = complaints.filter(c=>c.status==="Resolved").length;
+
+  const chartData = [
+    { name:"Pending", value: pending },
+    { name:"Resolved", value: resolved }
+  ];
 
   return (
 
@@ -87,13 +102,44 @@ function ComplaintList() {
 
         </Grid>
 
-        <Box mt={5}>
+        <Box mt={6}>
 
-          <Typography variant="h5" mb={2}>
-            Complaints List
+          <Typography variant="h5" mb={3}>
+            Complaint Status
+          </Typography>
+
+          <ResponsiveContainer width="100%" height={300}>
+            <PieChart>
+
+              <Pie
+                data={chartData}
+                dataKey="value"
+                nameKey="name"
+                outerRadius={100}
+                label
+              >
+
+                {chartData.map((entry,index)=>(
+                  <Cell key={index} fill={COLORS[index]} />
+                ))}
+
+              </Pie>
+
+              <Tooltip/>
+
+            </PieChart>
+          </ResponsiveContainer>
+
+        </Box>
+
+        <Box mt={6}>
+
+          <Typography variant="h5" mb={3}>
+            Complaints
           </Typography>
 
           {complaints.map((c)=>(
+
             <Card key={c.id} sx={{mb:2}}>
               <CardContent>
 
@@ -115,6 +161,7 @@ function ComplaintList() {
 
               </CardContent>
             </Card>
+
           ))}
 
         </Box>
@@ -124,6 +171,7 @@ function ComplaintList() {
     </Container>
 
   );
+
 }
 
 export default ComplaintList;
