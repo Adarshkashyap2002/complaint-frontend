@@ -2,11 +2,24 @@ import React, { useState } from "react";
 import axios from "axios";
 import API_URL from "../api";
 
+import {
+  Container,
+  Paper,
+  Typography,
+  TextField,
+  Button,
+  Box,
+  Alert
+} from "@mui/material";
+
 function AddComplaint() {
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [location, setLocation] = useState("");
+
+  const [success, setSuccess] = useState("");
+  const [error, setError] = useState("");
 
   const handleSubmit = async (e) => {
 
@@ -14,33 +27,40 @@ function AddComplaint() {
 
     const token = localStorage.getItem("access_token");
 
+    if (!token) {
+      setError("Login required");
+      return;
+    }
+
     try {
 
       await axios.post(
         `${API_URL}/api/complaints/`,
         {
-          title: title,
-          description: description,
-          location: location,
+          title,
+          description,
+          location,
           status: "Pending"
         },
         {
           headers: {
-            Authorization: `Bearer ${token}`
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json"
           }
         }
       );
 
-      alert("Complaint Submitted Successfully");
+      setSuccess("Complaint submitted successfully");
 
       setTitle("");
       setDescription("");
       setLocation("");
 
-    } catch (error) {
+    } catch (err) {
 
-      console.error(error);
-      alert("Error submitting complaint");
+      console.error(err.response?.data);
+
+      setError("Error submitting complaint");
 
     }
 
@@ -48,48 +68,62 @@ function AddComplaint() {
 
   return (
 
-    <div style={{ padding: "40px" }}>
+    <Container maxWidth="sm" sx={{ mt:5 }}>
 
-      <h2>Add Complaint</h2>
+      <Paper elevation={6} sx={{ p:4 }}>
 
-      <form onSubmit={handleSubmit}>
+        <Typography variant="h4" gutterBottom>
+          Add Complaint
+        </Typography>
 
-        <div style={{ marginBottom: "10px" }}>
-          <input
-            type="text"
-            placeholder="Title"
+        {success && <Alert severity="success">{success}</Alert>}
+        {error && <Alert severity="error">{error}</Alert>}
+
+        <Box component="form" onSubmit={handleSubmit} sx={{ mt:2 }}>
+
+          <TextField
+            fullWidth
+            label="Complaint Title"
+            margin="normal"
             value={title}
-            onChange={(e) => setTitle(e.target.value)}
+            onChange={(e)=>setTitle(e.target.value)}
             required
           />
-        </div>
 
-        <div style={{ marginBottom: "10px" }}>
-          <textarea
-            placeholder="Description"
+          <TextField
+            fullWidth
+            label="Description"
+            margin="normal"
+            multiline
+            rows={4}
             value={description}
-            onChange={(e) => setDescription(e.target.value)}
+            onChange={(e)=>setDescription(e.target.value)}
             required
           />
-        </div>
 
-        <div style={{ marginBottom: "10px" }}>
-          <input
-            type="text"
-            placeholder="Location"
+          <TextField
+            fullWidth
+            label="Location"
+            margin="normal"
             value={location}
-            onChange={(e) => setLocation(e.target.value)}
+            onChange={(e)=>setLocation(e.target.value)}
             required
           />
-        </div>
 
-        <button type="submit">
-          Submit Complaint
-        </button>
+          <Button
+            variant="contained"
+            type="submit"
+            fullWidth
+            sx={{ mt:3 }}
+          >
+            Submit Complaint
+          </Button>
 
-      </form>
+        </Box>
 
-    </div>
+      </Paper>
+
+    </Container>
 
   );
 

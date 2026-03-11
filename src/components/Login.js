@@ -29,7 +29,6 @@ function Login() {
 
   const navigate = useNavigate();
 
-  // PREFILLED LOGIN
   const [username, setUsername] = useState("admin");
   const [password, setPassword] = useState("admin123");
 
@@ -58,8 +57,9 @@ function Login() {
 
     } catch (err) {
 
-      console.log(err.response?.data);
-      setError(JSON.stringify(err.response?.data));
+      console.error(err.response?.data);
+
+      setError("Invalid username or password");
 
     } finally {
 
@@ -69,14 +69,11 @@ function Login() {
 
   };
 
-  // AUTO LOGIN WHEN PAGE LOADS
   useEffect(() => {
 
     const token = localStorage.getItem("access_token");
 
-    if (!token) {
-      handleLogin();
-    } else {
+    if (token) {
       navigate("/complaints");
     }
 
