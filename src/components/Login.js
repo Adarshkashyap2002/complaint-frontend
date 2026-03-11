@@ -3,80 +3,174 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import API_URL from "../api";
 
+import {
+  Container,
+  TextField,
+  Button,
+  Typography,
+  Box,
+  Paper,
+  InputAdornment,
+  IconButton,
+  CircularProgress,
+  Alert,
+  Fade,
+} from "@mui/material";
+
+import {
+  Visibility,
+  VisibilityOff,
+  LockOutlined,
+  PersonOutline,
+} from "@mui/icons-material";
+
 function Login() {
 
   const navigate = useNavigate();
 
   const [username, setUsername] = useState("admin");
   const [password, setPassword] = useState("admin123");
+
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const handleLogin = async (e) => {
 
     e.preventDefault();
     setLoading(true);
+    setError("");
 
     try {
 
-      const response = await axios.post(
-        `${API_URL}/api/token/`,
-        {
-          username: username,
-          password: password
-        }
-      );
+      const res = await axios.post(`${API_URL}/api/token/`, {
+        username: username,
+        password: password,
+      });
 
-      localStorage.setItem("access_token", response.data.access);
-      localStorage.setItem("refresh_token", response.data.refresh);
+      localStorage.setItem("access_token", res.data.access);
+      localStorage.setItem("refresh_token", res.data.refresh);
 
       navigate("/complaints");
 
-    } catch (error) {
+    } catch (err) {
 
-      console.error(error);
-      alert("Login failed");
+      console.error(err);
+      setError("Invalid username or password");
+
+    } finally {
+
+      setLoading(false);
 
     }
-
-    setLoading(false);
 
   };
 
   return (
 
-    <div style={{textAlign:"center", marginTop:"100px"}}>
+    <Box
+      sx={{
+        minHeight: "100vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        background: "linear-gradient(135deg,#667eea,#764ba2)",
+      }}
+    >
 
-      <h2>Login</h2>
+      <Container maxWidth="xs">
 
-      <form onSubmit={handleLogin}>
+        <Fade in timeout={800}>
 
-        <input
-          type="text"
-          placeholder="Username"
-          value={username}
-          onChange={(e)=>setUsername(e.target.value)}
-        />
+          <Paper elevation={10} sx={{ p:4, borderRadius:3 }}>
 
-        <br/><br/>
+            <Box
+              sx={{
+                backgroundColor:"primary.main",
+                borderRadius:"50%",
+                p:2,
+                display:"inline-flex",
+                mb:2,
+                color:"white",
+              }}
+            >
+              <LockOutlined/>
+            </Box>
 
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e)=>setPassword(e.target.value)}
-        />
+            <Typography variant="h4" fontWeight="bold">
+              Login
+            </Typography>
 
-        <br/><br/>
+            {error && (
+              <Alert severity="error" sx={{ mt:2 }}>
+                {error}
+              </Alert>
+            )}
 
-        <button type="submit">
-          {loading ? "Logging..." : "Login"}
-        </button>
+            <form onSubmit={handleLogin}>
 
-      </form>
+              <TextField
+                fullWidth
+                label="Username"
+                margin="normal"
+                value={username}
+                onChange={(e)=>setUsername(e.target.value)}
+                InputProps={{
+                  startAdornment:(
+                    <InputAdornment position="start">
+                      <PersonOutline/>
+                    </InputAdornment>
+                  )
+                }}
+              />
 
-    </div>
+              <TextField
+                fullWidth
+                label="Password"
+                type={showPassword ? "text":"password"}
+                margin="normal"
+                value={password}
+                onChange={(e)=>setPassword(e.target.value)}
+                InputProps={{
+                  startAdornment:(
+                    <InputAdornment position="start">
+                      <LockOutlined/>
+                    </InputAdornment>
+                  ),
+                  endAdornment:(
+                    <InputAdornment position="end">
+                      <IconButton
+                        onClick={()=>setShowPassword(!showPassword)}
+                      >
+                        {showPassword ? <VisibilityOff/> : <Visibility/>}
+                      </IconButton>
+                    </InputAdornment>
+                  )
+                }}
+              />
+
+              <Button
+                fullWidth
+                variant="contained"
+                type="submit"
+                sx={{ mt:3 }}
+                disabled={loading}
+              >
+                {loading ? <CircularProgress size={24}/> : "Login"}
+              </Button>
+
+            </form>
+
+          </Paper>
+
+        </Fade>
+
+      </Container>
+
+    </Box>
 
   );
+
 }
 
 export default Login;

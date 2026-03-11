@@ -2,11 +2,25 @@ import React, { useState } from "react";
 import axios from "axios";
 import API_URL from "../api";
 
+import {
+  Container,
+  TextField,
+  Button,
+  Typography,
+  Box,
+  Paper,
+  Grid,
+  Alert
+} from "@mui/material";
+
 function AddComplaint() {
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [location, setLocation] = useState("");
+
+  const [success,setSuccess] = useState("");
+  const [error,setError] = useState("");
 
   const handleSubmit = async (e) => {
 
@@ -19,28 +33,30 @@ function AddComplaint() {
       await axios.post(
         `${API_URL}/api/complaints/`,
         {
-          title: title,
-          description: description,
-          location: location,
+          title,
+          description,
+          location,
           status: "Pending"
         },
         {
-          headers: {
-            Authorization: `Bearer ${token}`
+          headers:{
+            Authorization:`Bearer ${token}`
           }
         }
       );
 
-      alert("Complaint submitted");
+      setSuccess("Complaint submitted successfully");
+      setError("");
 
       setTitle("");
       setDescription("");
       setLocation("");
 
-    } catch (error) {
+    } catch(err){
 
-      console.error(error);
-      alert("Error submitting complaint");
+      console.error(err);
+      setError("Failed to submit complaint");
+      setSuccess("");
 
     }
 
@@ -48,45 +64,74 @@ function AddComplaint() {
 
   return (
 
-    <div style={{padding:"40px"}}>
+    <Container maxWidth="md">
 
-      <h2>Add Complaint</h2>
+      <Box sx={{ mt:5 }}>
 
-      <form onSubmit={handleSubmit}>
+        <Paper elevation={8} sx={{ p:4 }}>
 
-        <input
-          type="text"
-          placeholder="Title"
-          value={title}
-          onChange={(e)=>setTitle(e.target.value)}
-        />
+          <Typography variant="h4" mb={3}>
+            Add Complaint
+          </Typography>
 
-        <br/><br/>
+          {success && <Alert severity="success">{success}</Alert>}
+          {error && <Alert severity="error">{error}</Alert>}
 
-        <textarea
-          placeholder="Description"
-          value={description}
-          onChange={(e)=>setDescription(e.target.value)}
-        />
+          <form onSubmit={handleSubmit}>
 
-        <br/><br/>
+            <Grid container spacing={3}>
 
-        <input
-          type="text"
-          placeholder="Location"
-          value={location}
-          onChange={(e)=>setLocation(e.target.value)}
-        />
+              <Grid item xs={12}>
+                <TextField
+                  label="Complaint Title"
+                  fullWidth
+                  value={title}
+                  onChange={(e)=>setTitle(e.target.value)}
+                  required
+                />
+              </Grid>
 
-        <br/><br/>
+              <Grid item xs={12}>
+                <TextField
+                  label="Description"
+                  fullWidth
+                  multiline
+                  rows={4}
+                  value={description}
+                  onChange={(e)=>setDescription(e.target.value)}
+                  required
+                />
+              </Grid>
 
-        <button type="submit">
-          Submit Complaint
-        </button>
+              <Grid item xs={12}>
+                <TextField
+                  label="Location"
+                  fullWidth
+                  value={location}
+                  onChange={(e)=>setLocation(e.target.value)}
+                  required
+                />
+              </Grid>
 
-      </form>
+              <Grid item xs={12}>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  size="large"
+                >
+                  Submit Complaint
+                </Button>
+              </Grid>
 
-    </div>
+            </Grid>
+
+          </form>
+
+        </Paper>
+
+      </Box>
+
+    </Container>
 
   );
 }
