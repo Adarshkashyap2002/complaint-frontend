@@ -1,23 +1,16 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import API_URL from "../api";
-import { useNavigate } from "react-router-dom";
 
 import {
-  Container,
-  Typography,
   Grid,
   Card,
   CardContent,
-  Box,
-  Button
+  Typography,
+  Box
 } from "@mui/material";
 
-import AddIcon from "@mui/icons-material/Add";
-
-function ComplaintList() {
-
-  const navigate = useNavigate();
+function ComplaintList(){
 
   const [complaints,setComplaints] = useState([]);
 
@@ -25,7 +18,7 @@ function ComplaintList() {
 
     const token = localStorage.getItem("access_token");
 
-    try {
+    try{
 
       const res = await axios.get(
         `${API_URL}/api/complaints/`,
@@ -38,8 +31,8 @@ function ComplaintList() {
 
       setComplaints(res.data);
 
-    } catch(err){
-      console.error(err);
+    }catch(err){
+      console.log(err);
     }
 
   };
@@ -52,122 +45,92 @@ function ComplaintList() {
   const pending = complaints.filter(c=>c.status==="Pending").length;
   const resolved = complaints.filter(c=>c.status==="Resolved").length;
 
-  return (
+  return(
 
-    <Container maxWidth="lg">
+    <Box>
 
-      <Box sx={{mt:5}}>
+      <Typography variant="h4" mb={4}>
+        Dashboard
+      </Typography>
 
-        <Box
-          sx={{
-            display:"flex",
-            justifyContent:"space-between",
-            alignItems:"center",
-            mb:4
-          }}
-        >
+      <Grid container spacing={3}>
 
-          <Typography variant="h4">
-            Complaint Dashboard
-          </Typography>
-
-          <Button
-            variant="contained"
-            startIcon={<AddIcon/>}
-            onClick={()=>navigate("/add-complaint")}
-          >
-            Add Complaint
-          </Button>
-
-        </Box>
-
-        <Grid container spacing={3}>
-
-          <Grid item xs={12} md={4}>
-            <Card>
-              <CardContent>
-
-                <Typography variant="h6">
-                  Total Complaints
-                </Typography>
-
-                <Typography variant="h3">
-                  {total}
-                </Typography>
-
-              </CardContent>
-            </Card>
-          </Grid>
-
-          <Grid item xs={12} md={4}>
-            <Card>
-              <CardContent>
-
-                <Typography variant="h6">
-                  Pending
-                </Typography>
-
-                <Typography variant="h3">
-                  {pending}
-                </Typography>
-
-              </CardContent>
-            </Card>
-          </Grid>
-
-          <Grid item xs={12} md={4}>
-            <Card>
-              <CardContent>
-
-                <Typography variant="h6">
-                  Resolved
-                </Typography>
-
-                <Typography variant="h3">
-                  {resolved}
-                </Typography>
-
-              </CardContent>
-            </Card>
-          </Grid>
-
+        <Grid item xs={4}>
+          <Card>
+            <CardContent>
+              <Typography variant="h6">
+                Total Complaints
+              </Typography>
+              <Typography variant="h3">
+                {total}
+              </Typography>
+            </CardContent>
+          </Card>
         </Grid>
 
-        <Box mt={5}>
+        <Grid item xs={4}>
+          <Card>
+            <CardContent>
+              <Typography variant="h6">
+                Pending
+              </Typography>
+              <Typography variant="h3">
+                {pending}
+              </Typography>
+            </CardContent>
+          </Card>
+        </Grid>
 
-          <Typography variant="h5" mb={3}>
-            Recent Complaints
-          </Typography>
+        <Grid item xs={4}>
+          <Card>
+            <CardContent>
+              <Typography variant="h6">
+                Resolved
+              </Typography>
+              <Typography variant="h3">
+                {resolved}
+              </Typography>
+            </CardContent>
+          </Card>
+        </Grid>
 
-          {complaints.map((c)=>(
-            <Card key={c.id} sx={{mb:2}}>
-              <CardContent>
+      </Grid>
 
-                <Typography variant="h6">
-                  {c.title}
-                </Typography>
+      <Box mt={5}>
 
-                <Typography>
-                  {c.description}
-                </Typography>
+        <Typography variant="h5" mb={2}>
+          Recent Complaints
+        </Typography>
 
-                <Typography>
-                  Location: {c.location}
-                </Typography>
+        {complaints.map(c=>(
 
-                <Typography>
-                  Status: {c.status}
-                </Typography>
+          <Card key={c.id} sx={{mb:2}}>
+            <CardContent>
 
-              </CardContent>
-            </Card>
-          ))}
+              <Typography variant="h6">
+                {c.title}
+              </Typography>
 
-        </Box>
+              <Typography>
+                {c.description}
+              </Typography>
+
+              <Typography>
+                Location: {c.location}
+              </Typography>
+
+              <Typography>
+                Status: {c.status}
+              </Typography>
+
+            </CardContent>
+          </Card>
+
+        ))}
 
       </Box>
 
-    </Container>
+    </Box>
 
   );
 
