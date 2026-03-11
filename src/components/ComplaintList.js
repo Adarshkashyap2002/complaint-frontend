@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import API_URL from "../api";
+import { useNavigate } from "react-router-dom";
 
 import {
   Container,
@@ -8,20 +9,15 @@ import {
   Grid,
   Card,
   CardContent,
-  Box
+  Box,
+  Button
 } from "@mui/material";
 
-import {
-  PieChart,
-  Pie,
-  Cell,
-  Tooltip,
-  ResponsiveContainer
-} from "recharts";
-
-const COLORS = ["#ff9800", "#4caf50"];
+import AddIcon from "@mui/icons-material/Add";
 
 function ComplaintList() {
+
+  const navigate = useNavigate();
 
   const [complaints,setComplaints] = useState([]);
 
@@ -56,90 +52,94 @@ function ComplaintList() {
   const pending = complaints.filter(c=>c.status==="Pending").length;
   const resolved = complaints.filter(c=>c.status==="Resolved").length;
 
-  const chartData = [
-    { name:"Pending", value: pending },
-    { name:"Resolved", value: resolved }
-  ];
-
   return (
 
-    <Container>
+    <Container maxWidth="lg">
 
       <Box sx={{mt:5}}>
 
-        <Typography variant="h4" mb={4}>
-          Complaint Dashboard
-        </Typography>
+        <Box
+          sx={{
+            display:"flex",
+            justifyContent:"space-between",
+            alignItems:"center",
+            mb:4
+          }}
+        >
+
+          <Typography variant="h4">
+            Complaint Dashboard
+          </Typography>
+
+          <Button
+            variant="contained"
+            startIcon={<AddIcon/>}
+            onClick={()=>navigate("/add-complaint")}
+          >
+            Add Complaint
+          </Button>
+
+        </Box>
 
         <Grid container spacing={3}>
 
-          <Grid item xs={4}>
+          <Grid item xs={12} md={4}>
             <Card>
               <CardContent>
-                <Typography variant="h6">Total Complaints</Typography>
-                <Typography variant="h3">{total}</Typography>
+
+                <Typography variant="h6">
+                  Total Complaints
+                </Typography>
+
+                <Typography variant="h3">
+                  {total}
+                </Typography>
+
               </CardContent>
             </Card>
           </Grid>
 
-          <Grid item xs={4}>
+          <Grid item xs={12} md={4}>
             <Card>
               <CardContent>
-                <Typography variant="h6">Pending</Typography>
-                <Typography variant="h3">{pending}</Typography>
+
+                <Typography variant="h6">
+                  Pending
+                </Typography>
+
+                <Typography variant="h3">
+                  {pending}
+                </Typography>
+
               </CardContent>
             </Card>
           </Grid>
 
-          <Grid item xs={4}>
+          <Grid item xs={12} md={4}>
             <Card>
               <CardContent>
-                <Typography variant="h6">Resolved</Typography>
-                <Typography variant="h3">{resolved}</Typography>
+
+                <Typography variant="h6">
+                  Resolved
+                </Typography>
+
+                <Typography variant="h3">
+                  {resolved}
+                </Typography>
+
               </CardContent>
             </Card>
           </Grid>
 
         </Grid>
 
-        <Box mt={6}>
+        <Box mt={5}>
 
           <Typography variant="h5" mb={3}>
-            Complaint Status
-          </Typography>
-
-          <ResponsiveContainer width="100%" height={300}>
-            <PieChart>
-
-              <Pie
-                data={chartData}
-                dataKey="value"
-                nameKey="name"
-                outerRadius={100}
-                label
-              >
-
-                {chartData.map((entry,index)=>(
-                  <Cell key={index} fill={COLORS[index]} />
-                ))}
-
-              </Pie>
-
-              <Tooltip/>
-
-            </PieChart>
-          </ResponsiveContainer>
-
-        </Box>
-
-        <Box mt={6}>
-
-          <Typography variant="h5" mb={3}>
-            Complaints
+            Recent Complaints
           </Typography>
 
           {complaints.map((c)=>(
-
             <Card key={c.id} sx={{mb:2}}>
               <CardContent>
 
@@ -161,7 +161,6 @@ function ComplaintList() {
 
               </CardContent>
             </Card>
-
           ))}
 
         </Box>
