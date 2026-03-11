@@ -1,29 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-
 import API_URL from "../api";
-
-import {
-  Container,
-  TextField,
-  Button,
-  Typography,
-  Box,
-  Paper,
-  InputAdornment,
-  IconButton,
-  CircularProgress,
-  Alert,
-  Fade,
-} from "@mui/material";
-
-import {
-  Visibility,
-  VisibilityOff,
-  LockOutlined,
-  PersonOutline,
-} from "@mui/icons-material";
 
 function Login() {
 
@@ -31,152 +9,73 @@ function Login() {
 
   const [username, setUsername] = useState("admin");
   const [password, setPassword] = useState("admin123");
-
-  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
 
   const handleLogin = async (e) => {
 
-    if (e) e.preventDefault();
-
+    e.preventDefault();
     setLoading(true);
-    setError("");
 
     try {
 
-      const res = await axios.post(`${API_URL}/api/token/`, {
-        username: username.trim(),
-        password: password.trim(),
-      });
+      const response = await axios.post(
+        `${API_URL}/api/token/`,
+        {
+          username: username,
+          password: password
+        }
+      );
 
-      localStorage.setItem("access_token", res.data.access);
-      localStorage.setItem("refresh_token", res.data.refresh);
+      localStorage.setItem("access_token", response.data.access);
+      localStorage.setItem("refresh_token", response.data.refresh);
 
       navigate("/complaints");
 
-    } catch (err) {
+    } catch (error) {
 
-      console.error(err.response?.data);
-      setError("Invalid username or password");
-
-    } finally {
-
-      setLoading(false);
+      console.error(error);
+      alert("Login failed");
 
     }
+
+    setLoading(false);
 
   };
 
-  useEffect(() => {
-
-    const token = localStorage.getItem("access_token");
-
-    if (token) {
-      navigate("/complaints");
-    }
-
-  }, [navigate]);
-
   return (
-    <Box
-      sx={{
-        minHeight: "100vh",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        background: "linear-gradient(135deg,#667eea,#764ba2)",
-      }}
-    >
-      <Container maxWidth="xs">
 
-        <Fade in={true} timeout={800}>
+    <div style={{textAlign:"center", marginTop:"100px"}}>
 
-          <Paper elevation={10} sx={{ p:4, borderRadius:3 }}>
+      <h2>Login</h2>
 
-            <Box
-              sx={{
-                backgroundColor:"primary.main",
-                borderRadius:"50%",
-                p:2,
-                display:"inline-flex",
-                mb:2,
-                color:"white",
-              }}
-            >
-              <LockOutlined/>
-            </Box>
+      <form onSubmit={handleLogin}>
 
-            <Typography variant="h4" fontWeight="bold">
-              Login
-            </Typography>
+        <input
+          type="text"
+          placeholder="Username"
+          value={username}
+          onChange={(e)=>setUsername(e.target.value)}
+        />
 
-            {error && (
-              <Alert severity="error" sx={{ mt:2 }}>
-                {error}
-              </Alert>
-            )}
+        <br/><br/>
 
-            <form onSubmit={handleLogin}>
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e)=>setPassword(e.target.value)}
+        />
 
-              <TextField
-                fullWidth
-                label="Username"
-                margin="normal"
-                value={username}
-                onChange={(e)=>setUsername(e.target.value)}
-                InputProps={{
-                  startAdornment:(
-                    <InputAdornment position="start">
-                      <PersonOutline/>
-                    </InputAdornment>
-                  )
-                }}
-              />
+        <br/><br/>
 
-              <TextField
-                fullWidth
-                label="Password"
-                type={showPassword ? "text":"password"}
-                margin="normal"
-                value={password}
-                onChange={(e)=>setPassword(e.target.value)}
-                InputProps={{
-                  startAdornment:(
-                    <InputAdornment position="start">
-                      <LockOutlined/>
-                    </InputAdornment>
-                  ),
-                  endAdornment:(
-                    <InputAdornment position="end">
-                      <IconButton
-                        onClick={()=>setShowPassword(!showPassword)}
-                      >
-                        {showPassword ? <VisibilityOff/> : <Visibility/>}
-                      </IconButton>
-                    </InputAdornment>
-                  )
-                }}
-              />
+        <button type="submit">
+          {loading ? "Logging..." : "Login"}
+        </button>
 
-              <Button
-                fullWidth
-                variant="contained"
-                type="submit"
-                sx={{ mt:3 }}
-                disabled={loading}
-              >
-                {loading ? <CircularProgress size={24}/> : "Login"}
-              </Button>
+      </form>
 
-            </form>
+    </div>
 
-          </Paper>
-
-        </Fade>
-
-      </Container>
-    </Box>
   );
 }
 
