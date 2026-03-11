@@ -58,7 +58,6 @@ function Login() {
     } catch (err) {
 
       console.error(err.response?.data);
-
       setError("Invalid username or password");
 
     } finally {
@@ -77,7 +76,7 @@ function Login() {
       navigate("/complaints");
     }
 
-  }, []);
+  }, [navigate]);
 
   return (
     <Box
