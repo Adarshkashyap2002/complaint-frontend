@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import API_URL from "../api";
 
 import {
   Container,
@@ -27,7 +28,7 @@ function ComplaintList() {
     const token = localStorage.getItem("access_token");
 
     axios.get(
-      "http://127.0.0.1:8000/api/complaints/",
+      `${API_URL}/api/complaints/`,
       {
         headers:{
           Authorization:`Bearer ${token}`
@@ -36,6 +37,9 @@ function ComplaintList() {
     )
     .then(res=>{
       setComplaints(res.data);
+    })
+    .catch(err=>{
+      console.log(err);
     });
 
   },[]);
@@ -70,103 +74,39 @@ function ComplaintList() {
           Complaint Dashboard
         </Typography>
 
-        {/* Stats Cards */}
-
         <Grid container spacing={3} mb={5}>
 
           <Grid item xs={12} md={4}>
-
-            <Card
-              sx={{
-                height:120,
-                display:"flex",
-                alignItems:"center",
-                justifyContent:"space-between",
-                px:3,
-                borderRadius:4,
-                background:"#f1f5ff"
-              }}
-            >
-
+            <Card sx={{height:120,display:"flex",alignItems:"center",justifyContent:"space-between",px:3,borderRadius:4,background:"#f1f5ff"}}>
               <Box>
-                <Typography variant="h6">
-                  Total Complaints
-                </Typography>
-
-                <Typography variant="h3" fontWeight="bold">
-                  {total}
-                </Typography>
+                <Typography variant="h6">Total Complaints</Typography>
+                <Typography variant="h3" fontWeight="bold">{total}</Typography>
               </Box>
-
               <AssignmentIcon color="primary"/>
-
             </Card>
-
           </Grid>
 
           <Grid item xs={12} md={4}>
-
-            <Card
-              sx={{
-                height:120,
-                display:"flex",
-                alignItems:"center",
-                justifyContent:"space-between",
-                px:3,
-                borderRadius:4,
-                background:"#fff7e6"
-              }}
-            >
-
+            <Card sx={{height:120,display:"flex",alignItems:"center",justifyContent:"space-between",px:3,borderRadius:4,background:"#fff7e6"}}>
               <Box>
-                <Typography variant="h6">
-                  Pending
-                </Typography>
-
-                <Typography variant="h3" fontWeight="bold">
-                  {pending}
-                </Typography>
+                <Typography variant="h6">Pending</Typography>
+                <Typography variant="h3" fontWeight="bold">{pending}</Typography>
               </Box>
-
               <PendingActionsIcon color="warning"/>
-
             </Card>
-
           </Grid>
 
           <Grid item xs={12} md={4}>
-
-            <Card
-              sx={{
-                height:120,
-                display:"flex",
-                alignItems:"center",
-                justifyContent:"space-between",
-                px:3,
-                borderRadius:4,
-                background:"#ecfff4"
-              }}
-            >
-
+            <Card sx={{height:120,display:"flex",alignItems:"center",justifyContent:"space-between",px:3,borderRadius:4,background:"#ecfff4"}}>
               <Box>
-                <Typography variant="h6">
-                  Resolved
-                </Typography>
-
-                <Typography variant="h3" fontWeight="bold">
-                  {resolved}
-                </Typography>
+                <Typography variant="h6">Resolved</Typography>
+                <Typography variant="h3" fontWeight="bold">{resolved}</Typography>
               </Box>
-
               <CheckCircleIcon color="success"/>
-
             </Card>
-
           </Grid>
 
         </Grid>
-
-        {/* Chart */}
 
         <Paper sx={{ p:3, borderRadius:4, mb:5 }}>
 
@@ -174,24 +114,15 @@ function ComplaintList() {
             Complaint Analytics
           </Typography>
 
-          <ComplaintChart
-            pending={pending}
-            resolved={resolved}
-          />
+          <ComplaintChart pending={pending} resolved={resolved} />
 
         </Paper>
 
-        {/* Complaint List */}
-
         {complaints.map(c=>(
+
           <Paper
             key={c.id}
-            sx={{
-              p:3,
-              mb:2,
-              borderRadius:4,
-              border:"1px solid #eee"
-            }}
+            sx={{p:3,mb:2,borderRadius:4,border:"1px solid #eee"}}
           >
 
             <Typography variant="h6">
@@ -202,11 +133,7 @@ function ComplaintList() {
               {c.description}
             </Typography>
 
-            <Box
-              mt={2}
-              display="flex"
-              justifyContent="space-between"
-            >
+            <Box mt={2} display="flex" justifyContent="space-between">
 
               <Typography>
                 📍 {c.location}
@@ -220,6 +147,7 @@ function ComplaintList() {
             </Box>
 
           </Paper>
+
         ))}
 
       </Container>
