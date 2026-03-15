@@ -5,4 +5,116 @@
 --border:rgba(255,255,255,0.1);
 }
 
-/* same CSS you already sent */
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Plus Jakarta Sans',sans-serif;
+}
+
+.login-page{
+background:var(--bg);
+height:100vh;
+display:flex;
+align-items:center;
+justify-content:center;
+color:#fff;
+}
+
+.login-card{
+width:420px;
+padding:50px 45px;
+
+background:var(--card-bg);
+backdrop-filter:blur(25px);
+
+border:1px solid var(--border);
+border-radius:32px;
+
+box-shadow:0 40px 100px rgba(0,0,0,0.6);
+}
+
+.header{
+text-align:center;
+margin-bottom:40px;
+}
+
+.header h2{
+font-size:2rem;
+font-weight:700;
+margin-bottom:8px;
+}
+
+.header p{
+color:rgba(255,255,255,0.5);
+font-size:0.95rem;
+}
+
+.input-group{
+margin-bottom:25px;
+}
+
+.input-wrapper{
+position:relative;
+display:flex;
+align-items:center;
+}
+
+.input-wrapper i{
+position:absolute;
+left:18px;
+color:rgba(255,255,255,0.3);
+font-size:1.2rem;
+}
+
+.toggle{
+left:auto!important;
+right:18px;
+cursor:pointer;
+}
+
+.input-wrapper input{
+
+width:100%;
+padding:16px 16px 16px 52px;
+
+background:rgba(255,255,255,0.05);
+border:1px solid var(--border);
+border-radius:16px;
+
+color:#fff;
+outline:none;
+
+font-size:1rem;
+}
+
+.login-btn{
+
+width:100%;
+padding:16px;
+
+background:#fff;
+color:#000;
+
+border:none;
+border-radius:16px;
+
+font-size:1rem;
+font-weight:700;
+
+cursor:pointer;
+margin-top:10px;
+}
+
+.footer{
+margin-top:35px;
+text-align:center;
+font-size:0.9rem;
+color:rgba(255,255,255,0.5);
+}
+
+.link-btn{
+color:#3b82f6;
+font-weight:600;
+cursor:pointer;
+}

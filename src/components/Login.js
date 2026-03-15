@@ -48,8 +48,6 @@ return(
 
 <div className="login-page">
 
-<canvas id="canvas"></canvas>
-
 <div className="login-card">
 
 <div className="header">
@@ -84,7 +82,7 @@ required
 <i className="ri-lock-2-line"></i>
 
 <input
-type={showPassword?"text":"password"}
+type={showPassword ? "text":"password"}
 placeholder="Password"
 value={password}
 onChange={(e)=>setPassword(e.target.value)}
@@ -100,16 +98,19 @@ onClick={()=>setShowPassword(!showPassword)}
 
 </div>
 
-<button className="login-btn" type="submit">
+<button type="submit" className="login-btn">
 
-{loading? "Processing..." : "Continue"}
+{loading ? "Processing..." : "Continue"}
 
 </button>
 
 </form>
 
 <div className="footer">
-Don't have an account? <a href="#">Create one</a>
+
+Don't have an account?
+<span className="link-btn"> Create one</span>
+
 </div>
 
 </div>
