@@ -25,7 +25,7 @@ color:#fff;
 position:relative;
 }
 
-/* CANVAS PARTICLES */
+/* CANVAS */
 
 .canvas-bg{
 position:absolute;
@@ -39,6 +39,7 @@ z-index:1;
 /* LOGIN CARD */
 
 .login-card{
+
 position:relative;
 z-index:10;
 
@@ -51,9 +52,12 @@ backdrop-filter:blur(25px);
 border:1px solid var(--border);
 border-radius:32px;
 
-box-shadow:0 40px 100px rgba(0,0,0,0.6);
+box-shadow:
+0 40px 100px rgba(0,0,0,0.6),
+0 0 40px rgba(59,130,246,0.15);
 
 transition:0.3s;
+
 }
 
 .login-card:hover{
@@ -75,10 +79,9 @@ margin-bottom:8px;
 
 .header p{
 color:rgba(255,255,255,0.5);
-font-size:0.95rem;
 }
 
-/* INPUTS */
+/* INPUT */
 
 .input-group{
 margin-bottom:25px;
@@ -94,12 +97,11 @@ align-items:center;
 position:absolute;
 left:18px;
 color:rgba(255,255,255,0.3);
-font-size:1.2rem;
 }
 
 .toggle{
-left:auto!important;
 right:18px;
+left:auto!important;
 cursor:pointer;
 }
 
@@ -108,20 +110,32 @@ cursor:pointer;
 width:100%;
 padding:16px 16px 16px 52px;
 
-background:rgba(255,255,255,0.05);
-border:1px solid var(--border);
+background:rgba(255,255,255,0.08);
+border:1px solid rgba(255,255,255,0.12);
+
 border-radius:16px;
 
 color:#fff;
-outline:none;
 
 font-size:1rem;
+
+outline:none;
+
 transition:0.3s;
+
 }
 
+/* INPUT GLOW */
+
 .input-wrapper input:focus{
-background:rgba(255,255,255,0.08);
-border-color:var(--primary);
+
+border-color:#3b82f6;
+
+box-shadow:
+0 0 0 2px rgba(59,130,246,0.2),
+0 0 15px rgba(59,130,246,0.4),
+0 0 30px rgba(59,130,246,0.2);
+
 }
 
 /* BUTTON */
@@ -131,8 +145,9 @@ border-color:var(--primary);
 width:100%;
 padding:16px;
 
-background:#fff;
-color:#000;
+background:linear-gradient(135deg,#3b82f6,#2563eb);
+
+color:#fff;
 
 border:none;
 border-radius:16px;
@@ -142,16 +157,18 @@ font-weight:700;
 
 cursor:pointer;
 
-display:flex;
-align-items:center;
-justify-content:center;
-
 transition:0.3s;
+
 }
 
 .login-btn:hover{
-transform:translateY(-2px);
-background:#f0f0f0;
+
+transform:translateY(-3px);
+
+box-shadow:
+0 10px 25px rgba(59,130,246,0.5),
+0 0 20px rgba(59,130,246,0.4);
+
 }
 
 /* FOOTER */
@@ -159,18 +176,16 @@ background:#f0f0f0;
 .footer{
 margin-top:35px;
 text-align:center;
-font-size:0.9rem;
 color:rgba(255,255,255,0.5);
 }
 
 .link-btn{
 color:var(--primary);
-font-weight:600;
 cursor:pointer;
-margin-left:4px;
+font-weight:600;
 }
 
-/* RESPONSIVE */
+/* MOBILE */
 
 @media(max-width:500px){
 

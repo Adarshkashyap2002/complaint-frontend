@@ -8,11 +8,10 @@ import "./login.css";
 function Login(){
 
 const navigate = useNavigate();
-
 const canvasRef = useRef(null);
 
-const [username,setUsername] = useState("");
-const [password,setPassword] = useState("");
+const [username,setUsername] = useState("admin");
+const [password,setPassword] = useState("admin123");
 const [loading,setLoading] = useState(false);
 const [showPassword,setShowPassword] = useState(false);
 
@@ -76,7 +75,7 @@ draw(){
 
 ctx.beginPath();
 ctx.arc(this.x,this.y,2,0,Math.PI*2);
-ctx.fillStyle="rgba(59,130,246,0.5)";
+ctx.fillStyle="rgba(59,130,246,0.6)";
 ctx.fill();
 
 }
@@ -200,7 +199,7 @@ onClick={()=>setShowPassword(!showPassword)}
 
 </div>
 
-<button type="submit" className="login-btn">
+<button className="login-btn" type="submit">
 
 {loading ? "Processing..." : "Continue"}
 
@@ -209,10 +208,8 @@ onClick={()=>setShowPassword(!showPassword)}
 </form>
 
 <div className="footer">
-
 Don't have an account?
 <span className="link-btn"> Create one</span>
-
 </div>
 
 </div>
