@@ -12,16 +12,36 @@ box-sizing:border-box;
 font-family:'Plus Jakarta Sans',sans-serif;
 }
 
+/* PAGE */
+
 .login-page{
 background:var(--bg);
 height:100vh;
 display:flex;
 align-items:center;
 justify-content:center;
+overflow:hidden;
 color:#fff;
+position:relative;
 }
 
+/* CANVAS PARTICLES */
+
+.canvas-bg{
+position:absolute;
+top:0;
+left:0;
+width:100%;
+height:100%;
+z-index:1;
+}
+
+/* LOGIN CARD */
+
 .login-card{
+position:relative;
+z-index:10;
+
 width:420px;
 padding:50px 45px;
 
@@ -32,7 +52,15 @@ border:1px solid var(--border);
 border-radius:32px;
 
 box-shadow:0 40px 100px rgba(0,0,0,0.6);
+
+transition:0.3s;
 }
+
+.login-card:hover{
+transform:translateY(-5px);
+}
+
+/* HEADER */
 
 .header{
 text-align:center;
@@ -49,6 +77,8 @@ margin-bottom:8px;
 color:rgba(255,255,255,0.5);
 font-size:0.95rem;
 }
+
+/* INPUTS */
 
 .input-group{
 margin-bottom:25px;
@@ -86,7 +116,15 @@ color:#fff;
 outline:none;
 
 font-size:1rem;
+transition:0.3s;
 }
+
+.input-wrapper input:focus{
+background:rgba(255,255,255,0.08);
+border-color:var(--primary);
+}
+
+/* BUTTON */
 
 .login-btn{
 
@@ -103,8 +141,20 @@ font-size:1rem;
 font-weight:700;
 
 cursor:pointer;
-margin-top:10px;
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+transition:0.3s;
 }
+
+.login-btn:hover{
+transform:translateY(-2px);
+background:#f0f0f0;
+}
+
+/* FOOTER */
 
 .footer{
 margin-top:35px;
@@ -114,7 +164,19 @@ color:rgba(255,255,255,0.5);
 }
 
 .link-btn{
-color:#3b82f6;
+color:var(--primary);
 font-weight:600;
 cursor:pointer;
+margin-left:4px;
+}
+
+/* RESPONSIVE */
+
+@media(max-width:500px){
+
+.login-card{
+width:90%;
+padding:40px 30px;
+}
+
 }
