@@ -3,173 +3,120 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import API_URL from "../api";
 
-import {
-  Container,
-  TextField,
-  Button,
-  Typography,
-  Box,
-  Paper,
-  InputAdornment,
-  IconButton,
-  CircularProgress,
-  Alert,
-  Fade,
-} from "@mui/material";
+import "./login.css";
 
-import {
-  Visibility,
-  VisibilityOff,
-  LockOutlined,
-  PersonOutline,
-} from "@mui/icons-material";
+function Login(){
 
-function Login() {
+const navigate = useNavigate();
 
-  const navigate = useNavigate();
+const [username,setUsername] = useState("");
+const [password,setPassword] = useState("");
+const [loading,setLoading] = useState(false);
+const [showPassword,setShowPassword] = useState(false);
 
-  const [username, setUsername] = useState("admin");
-  const [password, setPassword] = useState("admin123");
+const handleLogin = async(e)=>{
 
-  const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+e.preventDefault();
+setLoading(true);
 
-  const handleLogin = async (e) => {
+try{
 
-    e.preventDefault();
-    setLoading(true);
-    setError("");
+const res = await axios.post(
+`${API_URL}/api/token/`,
+{
+username:username,
+password:password
+}
+);
 
-    try {
+localStorage.setItem("access_token",res.data.access);
+localStorage.setItem("refresh_token",res.data.refresh);
 
-      const res = await axios.post(`${API_URL}/api/token/`, {
-        username: username,
-        password: password,
-      });
+navigate("/complaints");
 
-      localStorage.setItem("access_token", res.data.access);
-      localStorage.setItem("refresh_token", res.data.refresh);
+}catch(err){
 
-      navigate("/complaints");
+alert("Invalid username or password");
 
-    } catch (err) {
+}
 
-      console.error(err);
-      setError("Invalid username or password");
+setLoading(false);
 
-    } finally {
+};
 
-      setLoading(false);
+return(
 
-    }
+<div className="login-page">
 
-  };
+<canvas id="canvas"></canvas>
 
-  return (
+<div className="login-card">
 
-    <Box
-      sx={{
-        minHeight: "100vh",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        background: "linear-gradient(135deg,#667eea,#764ba2)",
-      }}
-    >
+<div className="header">
+<h2>Sign in</h2>
+<p>Enter your details to access your account</p>
+</div>
 
-      <Container maxWidth="xs">
+<form onSubmit={handleLogin}>
 
-        <Fade in timeout={800}>
+<div className="input-group">
 
-          <Paper elevation={10} sx={{ p:4, borderRadius:3 }}>
+<div className="input-wrapper">
 
-            <Box
-              sx={{
-                backgroundColor:"primary.main",
-                borderRadius:"50%",
-                p:2,
-                display:"inline-flex",
-                mb:2,
-                color:"white",
-              }}
-            >
-              <LockOutlined/>
-            </Box>
+<i className="ri-mail-line"></i>
 
-            <Typography variant="h4" fontWeight="bold">
-              Login
-            </Typography>
+<input
+type="text"
+placeholder="Username"
+value={username}
+onChange={(e)=>setUsername(e.target.value)}
+required
+/>
 
-            {error && (
-              <Alert severity="error" sx={{ mt:2 }}>
-                {error}
-              </Alert>
-            )}
+</div>
 
-            <form onSubmit={handleLogin}>
+</div>
 
-              <TextField
-                fullWidth
-                label="Username"
-                margin="normal"
-                value={username}
-                onChange={(e)=>setUsername(e.target.value)}
-                InputProps={{
-                  startAdornment:(
-                    <InputAdornment position="start">
-                      <PersonOutline/>
-                    </InputAdornment>
-                  )
-                }}
-              />
+<div className="input-group">
 
-              <TextField
-                fullWidth
-                label="Password"
-                type={showPassword ? "text":"password"}
-                margin="normal"
-                value={password}
-                onChange={(e)=>setPassword(e.target.value)}
-                InputProps={{
-                  startAdornment:(
-                    <InputAdornment position="start">
-                      <LockOutlined/>
-                    </InputAdornment>
-                  ),
-                  endAdornment:(
-                    <InputAdornment position="end">
-                      <IconButton
-                        onClick={()=>setShowPassword(!showPassword)}
-                      >
-                        {showPassword ? <VisibilityOff/> : <Visibility/>}
-                      </IconButton>
-                    </InputAdornment>
-                  )
-                }}
-              />
+<div className="input-wrapper">
 
-              <Button
-                fullWidth
-                variant="contained"
-                type="submit"
-                sx={{ mt:3 }}
-                disabled={loading}
-              >
-                {loading ? <CircularProgress size={24}/> : "Login"}
-              </Button>
+<i className="ri-lock-2-line"></i>
 
-            </form>
+<input
+type={showPassword?"text":"password"}
+placeholder="Password"
+value={password}
+onChange={(e)=>setPassword(e.target.value)}
+required
+/>
 
-          </Paper>
+<i
+className="ri-eye-line toggle"
+onClick={()=>setShowPassword(!showPassword)}
+></i>
 
-        </Fade>
+</div>
 
-      </Container>
+</div>
 
-    </Box>
+<button className="login-btn" type="submit">
 
-  );
+{loading? "Processing..." : "Continue"}
+
+</button>
+
+</form>
+
+<div className="footer">
+Don't have an account? <a href="#">Create one</a>
+</div>
+
+</div>
+
+</div>
+
+);
 
 }
 
